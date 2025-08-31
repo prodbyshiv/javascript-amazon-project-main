@@ -1,31 +1,4 @@
-const products = [{
-    image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
-    name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-    ratings: {
-      stars:4.5,
-      count :87
-    },
-    priceCents: 1090
-},
-{
-  image: 'images/products/intermediate-composite-basketball.jpg',
-    name: 'Intermediate Size Basketball',
-    ratings: {
-      stars:4,
-      count :127
-    },
-    priceCents: 2095
-},
-{
-  image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-    name: 'IAdults Plain Cotton T-Shirt - 2 Pack',
-    ratings: {
-      stars:4.5,
-      count :56
-    },
-    priceCents: 799
-}
-];
+
 let productsHTML = '';
 
 products.forEach((product) => {
@@ -42,9 +15,9 @@ products.forEach((product) => {
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${product.ratings.stars *10}.png">
+              src="images/ratings/rating-${product.rating.stars *10}.png">
             <div class="product-rating-count link-primary">
-              ${product.ratings.count}
+              ${product.rating.count}
             </div>
           </div>
 
@@ -52,8 +25,10 @@ products.forEach((product) => {
             $${(product.priceCents /100).toFixed(2)}
           </div>
 
-          <div class="product-quantity-container">
-            <select>
+          <div class="product-quantity-container"
+          
+          >
+            <select class="js-quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -74,14 +49,50 @@ products.forEach((product) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">
+          <button class="add-to-cart-button button-primary js-add-to-cart "
+          data-product-id="${product.id}">
             Add to Cart
           </button>
         </div>
-  `
+  `;
   
+
   
-})
-console.log(productsHTML);
+});
+
 document.querySelector('.js-products-grid').
 innerHTML = productsHTML;
+
+
+
+document.querySelectorAll('.js-add-to-cart')
+.forEach((button) => {
+  button.addEventListener('click', ()=> {
+   const productId = button.dataset.productId;
+   
+    const selectValue = document.querySelector(`.js-quantity-selector-${productId}`).value;
+
+   let matchingitem; //check weather item is in the cart or not 
+   cart.forEach((item)=>{
+    if (item.id===productId) {
+      matchingitem = item;
+   }
+
+   
+   });
+   if (matchingitem) {      //if it is then update the cart    
+  matchingitem.quantity += 1;
+}
+else{                       //if not then add to cart
+  cart.push({
+    id: productId,
+    quantity: Number(selectValue) 
+  });
+}
+   
+console.log(cart);
+
+    
+    
+  });
+});
